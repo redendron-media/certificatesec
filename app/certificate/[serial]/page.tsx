@@ -7,17 +7,16 @@ import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{
-    udyam: string;
+    key: string;
   }>;
 }
 
-const fetchCertificateData = async (udyam: string) => {
+const fetchCertificateData = async (key: string) => {
   const query = `
-    *[_type == "certificates" && udyam == $udyam][0]{
+    *[_type == "certificates" && key == $key][0]{
       name,
       training,
       district,
-      udyam,
       serial,
       days,
       institute,
@@ -27,21 +26,21 @@ const fetchCertificateData = async (udyam: string) => {
     }
   `;
 
-  const certificate = await sanityClient.fetch(query, { udyam });
+  const certificate = await sanityClient.fetch(query, { key });
 
   if (!certificate) {
-    console.warn("No certificate found for:", udyam);
+    console.warn("No certificate found for:", key);
   }
 
   return certificate;
 };
 
 const CertificatePage = async ({ params }: Props) => {
-  const { udyam } = await params;
-  const decoded = decodeURIComponent(udyam);
+  const { key } = await params;
+  const decoded = decodeURIComponent(key);
   const certificate = await fetchCertificateData(decoded);
 
-  if (!certificate) return notFound();
+  // if (!certificate) return notFound();
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-white py-12 px-6">
@@ -54,7 +53,7 @@ const CertificatePage = async ({ params }: Props) => {
           This is proudly presented to
         </p>
 
-        <h2 className="text-3xl font-bold text-center mb-2  text-black">
+        {/* <h2 className="text-3xl font-bold text-center mb-2  text-black">
           {certificate.name}
         </h2>
 
@@ -87,7 +86,7 @@ const CertificatePage = async ({ params }: Props) => {
         <div className="text-center text-sm text-gray-800 mb-4">
           <p>Udyam No: {certificate.udyam}</p>
           <p>Serial No: {certificate.serial}</p>
-        </div>
+        </div> */}
       </section>
     </main>
   );
