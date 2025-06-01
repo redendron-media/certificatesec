@@ -18,7 +18,9 @@ export default defineConfig({
   projectId: "kmhnx1uu",
   dataset: "production",
   // Add and edit the content schema in the './sanity/schemaTypes' folder
-  schemaTypes,
+  schema: {
+    types: schemaTypes, // ✅ this is critical
+  },
   plugins: [
     structureTool({ structure }),
     // Vision is for querying with GROQ from inside the Studio
